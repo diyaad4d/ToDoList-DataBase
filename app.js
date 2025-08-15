@@ -21,6 +21,11 @@ const db=new pg.Client({
 db.connect();
 
 let items=[];
+let lists=[];
+
+async function getLists(){
+    
+}
 
 async function getItems() {
     const result=await db.query('select * from list order by id asc ');
@@ -60,14 +65,13 @@ async function deleteItem(id){
 
 
 
-
-app.get("/", async (req, res) => {
-    items=await getItems();
-    res.render("index.ejs", {
+ app.get("/", async (req, res) => {
+     items=await getItems();
+     res.render("index.ejs", {
         listTitle: "Tasks",
         listItems: items,
     });
-});
+ });
 
 app.post("/add", async (req, res) => {
     const item = req.body.newItem;
