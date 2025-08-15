@@ -29,7 +29,21 @@ Built using **Node.js**, **Express**, **PostgreSQL**, and **EJS** templating.
 - 🎨 Each list’s color is applied dynamically throughout the interface.  
 
 ---
+📊 **Database Schema & Relationships**
 
+### `multiple_lists` – stores the main to-do lists:
+- `id` (Primary Key)  
+- `name` (name of the list)  
+- `color` (color code for the list)  
+
+### `list` – stores tasks associated with each list:
+- `id` (Primary Key)  
+- `title` (task name)  
+- `list_id` (Foreign Key referencing `multiple_lists.id`)  
+
+**Relationship:**  
+- One list in `multiple_lists` can have many tasks in `list`.  
+- **ON DELETE CASCADE** is applied: deleting a list automatically deletes all its tasks.
 
 
 ---  
