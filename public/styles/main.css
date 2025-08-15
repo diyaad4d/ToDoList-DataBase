@@ -24,7 +24,7 @@ main {
 }
 
 :root {
-    --list-color: #8A2BE2; /* fallback color */
+    --list-color: #8A2BE2;
 }
 
 h1 {
@@ -154,7 +154,7 @@ button.edit:hover {
 
 .icon {
     height: 18px;
-    /* icon color white */
+
     color: var(--list-color);
 }
 
@@ -169,7 +169,6 @@ footer {
     color: rgba(255,255,255,0.6);
 }
 
-/* Lists page styling */
 .home-header {
     padding: 20px;
 }
@@ -177,7 +176,7 @@ footer {
 .new-list-btn {
     display: inline-block;
     text-align: center;
-    padding: 15px 30px; /* bigger button */
+    padding: 15px 30px;
     background: var(--list-color);
     color: white;
     font-weight: bold;
@@ -192,24 +191,22 @@ footer {
     filter: brightness(0.85);
 }
 
-/* Lists container */
 .lists-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 40px; /* space between cards */
+    gap: 40px;
     align-items: center;
     justify-content: center;
     padding: 10px;
 }
 
-/* List card */
 .list-card {
-    background-color: #3a3a3a; /* lighter gray card */
+    background-color: #3a3a3a;
     border-radius: 12px;
-    border-top: 6px solid var(--list-color); /* thicker top border */
-    box-shadow: 0 8px 20px rgba(58, 58, 58, 0.6); /* stronger, same color as card */
-    width: 350px;   /* portrait card */
-    min-height: 450px; /* taller than width */
+    border-top: 6px solid var(--list-color);
+    box-shadow: 0 8px 20px rgba(58, 58, 58, 0.6);
+    width: 350px;
+    min-height: 450px;
     padding: 15px;
     display: flex;
     flex-direction: column;
@@ -218,33 +215,30 @@ footer {
 
 .list-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 12px 30px rgba(58, 58, 58, 0.7); /* stronger on hover */
+    box-shadow: 0 12px 30px rgba(58, 58, 58, 0.7);
 }
 
-/* Card title */
 .list-title {
     font-size: 20px;
     margin-bottom: 15px;
-    color: #f5f5f5; /* readable on gray */
+    color: #f5f5f5;
 }
 
-/* Task list inside card */
 .list-preview {
     list-style: none;
     padding: 0;
     margin: 0 0 15px 0;
-    flex-grow: 1; /* fill vertical space */
+    flex-grow: 1;
 }
 
 .list-preview li {
-    background: #4a4a4a; /* slightly lighter for contrast */
+    background: #4a4a4a;
     margin-bottom: 8px;
     padding: 10px;
     border-radius: 6px;
     color: #f5f5f5;
 }
 
-/* View List button inside card */
 .view-list {
     text-align: center;
     text-decoration: none;
@@ -264,14 +258,14 @@ footer {
 
 .delete-list-btn {
     display: block;
-    padding: 6px 16px; /* smaller size */
-    margin-top: auto; /* pushes to bottom of card */
+    padding: 6px 16px;
+    margin-top: auto;
     margin-left: auto;
-    margin-right: auto; /* centers horizontally */
+    margin-right: auto;
     color: #fff;
     font-weight: bold;
-    font-size: 0.9rem; /* smaller text */
-    border-radius: 25px; /* more rounded corners */
+    font-size: 0.9rem;
+    border-radius: 25px;
     text-align: center;
     text-decoration: none;
 
