@@ -23,6 +23,10 @@ main {
     text-align: center;
 }
 
+:root {
+    --list-color: #8A2BE2; /* fallback color */
+}
+
 h1 {
     font-size: 1.8rem;
     font-weight: 600;
@@ -40,7 +44,7 @@ h1 {
 }
 
 #heading {
-    background: linear-gradient(135deg, #8A2BE2, #6A1BB8);
+    background: var(--list-color);
     text-align: center;
 }
 
@@ -67,9 +71,38 @@ p {
 }
 
 input[type="checkbox"] {
-    accent-color: #8A2BE2;
+    appearance: none;
+    -webkit-appearance: none;
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--list-color);
+    border-radius: 50%;
+    background-color: transparent;
+    cursor: pointer;
+    position: relative;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
     margin-right: 12px;
-    transform: scale(1.2);
+}
+
+input[type="checkbox"]:checked {
+    background-color: var(--list-color);
+    border-color: var(--list-color);
+}
+
+input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 8px;
+    width: 6px;
+    height: 12px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+input[type="checkbox"]:hover {
+    border-color: var(--list-color);
 }
 
 input[type="text"] {
@@ -83,7 +116,7 @@ input[type="text"] {
 
 input[type="text"]:focus {
     outline: none;
-    border-bottom: 2px solid #8A2BE2;
+    border-bottom: 2px solid var(--list-color);
 }
 
 ::placeholder {
@@ -95,8 +128,7 @@ button.add {
     width: 44px;
     border-radius: 50%;
     border: none;
-    background: #8A2BE2;
-    background: linear-gradient(135deg, #8A2BE2, #6A1BB8);
+    background: var(--list-color);
     color: white;
     font-size: 1.5rem;
     cursor: pointer;
@@ -104,7 +136,7 @@ button.add {
 }
 
 button.add:hover {
-    background: linear-gradient(135deg, #6A1BB8, #54168C);
+    filter: brightness(0.85);
 }
 
 button.edit {
@@ -122,7 +154,8 @@ button.edit:hover {
 
 .icon {
     height: 18px;
-    filter: invert(27%) sepia(88%) saturate(600%) hue-rotate(245deg) brightness(95%) contrast(95%);
+    /* icon color white */
+    color: var(--list-color);
 }
 
 form.edit {
@@ -136,54 +169,141 @@ footer {
     color: rgba(255,255,255,0.6);
 }
 
-@media (max-width: 600px) {
-    .box {
-        margin: 20px;
-    }
-
-    h1 {
-        font-size: 1.5rem;
-    }
-
-    p {
-        font-size: 0.95rem;
-    }
+/* Lists page styling */
+.home-header {
+    padding: 20px;
 }
 
-/************/
-input[type="checkbox"] {
-    appearance: none;
-    -webkit-appearance: none;
-    width: 24px;
-    height: 24px;
-    border: 2px solid #8A2BE2;
-    border-radius: 50%;
-    background-color: transparent;
-    cursor: pointer;
+.new-list-btn {
     display: inline-block;
-    position: relative;
-    transition: background-color 0.2s ease, border-color 0.2s ease;
+    text-align: center;
+    padding: 15px 30px; /* bigger button */
+    background: var(--list-color);
+    color: white;
+    font-weight: bold;
+    font-size: 1.2rem;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: filter 0.2s ease;
+    margin: 20px 0;
 }
 
-input[type="checkbox"]:checked {
-    background-color: #8A2BE2;
-    border-color: #8A2BE2;
+.new-list-btn:hover {
+    filter: brightness(0.85);
 }
 
-input[type="checkbox"]:checked::after {
-    content: '';
+/* Lists container */
+.lists-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px; /* space between cards */
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+/* List card */
+.list-card {
+    background-color: #3a3a3a; /* lighter gray card */
+    border-radius: 12px;
+    border-top: 6px solid var(--list-color); /* thicker top border */
+    box-shadow: 0 8px 20px rgba(58, 58, 58, 0.6); /* stronger, same color as card */
+    width: 350px;   /* portrait card */
+    min-height: 450px; /* taller than width */
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.list-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(58, 58, 58, 0.7); /* stronger on hover */
+}
+
+/* Card title */
+.list-title {
+    font-size: 20px;
+    margin-bottom: 15px;
+    color: #f5f5f5; /* readable on gray */
+}
+
+/* Task list inside card */
+.list-preview {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 15px 0;
+    flex-grow: 1; /* fill vertical space */
+}
+
+.list-preview li {
+    background: #4a4a4a; /* slightly lighter for contrast */
+    margin-bottom: 8px;
+    padding: 10px;
+    border-radius: 6px;
+    color: #f5f5f5;
+}
+
+/* View List button inside card */
+.view-list {
+    text-align: center;
+    text-decoration: none;
+    color: #fff;
+    padding: 12px;
+    border-radius: 5px;
+    font-weight: bold;
+    background: var(--list-color);
+    transition: filter 0.2s ease;
+    margin-top:10px;
+    margin-bottom: 55px;
+}
+
+.view-list:hover {
+    filter: brightness(0.85);
+}
+
+.delete-list-btn {
+    display: block;
+    padding: 6px 16px; /* smaller size */
+    margin-top: auto; /* pushes to bottom of card */
+    margin-left: auto;
+    margin-right: auto; /* centers horizontally */
+    color: #fff;
+    font-weight: bold;
+    font-size: 0.9rem; /* smaller text */
+    border-radius: 25px; /* more rounded corners */
+    text-align: center;
+    text-decoration: none;
+
+    transition: filter 0.2s ease, transform 0.2s ease;
+    cursor: pointer;
+}
+
+.delete-list-btn:hover {
+    filter: brightness(0.85);
+    transform: translateY(-1px);
+}
+
+
+.back-home {
     position: absolute;
-    top: 4px;
-    left: 8px;
-    width: 6px;
-    height: 12px;
-    border: solid white;
-    border-width: 0 2px 2px 0;
-    transform: rotate(45deg);
+    top: 16px;
+    left: 16px;
 }
 
+.back-btn {
+    display: inline-block;
+    padding: 8px 20px;
+    border-radius: 6px;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    transition: background 0.3s ease, filter 0.3s ease;
+    margin-left: 20px;
+    margin-top: 8px;
+}
 
-input[type="checkbox"]:hover {
-    border-color: #6A1BB8;
+.back-btn:hover {
+    filter: brightness(0.85);
 }
 

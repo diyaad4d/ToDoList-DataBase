@@ -1,0 +1,33 @@
+<%- include('parts/header.ejs'); -%>
+
+<div class="home-header">
+    <a href="/new" class="new-list-btn">+ New List</a>
+</div>
+
+<div class="lists-container">
+    <% for (let list of lists) { %>
+        <div class="list-card" style="border-top-color: <%= list.color %>;">
+            <!-- Title -->
+            <h2 class="list-title"><%= list.name %></h2>
+
+            <!-- View List Button -->
+            <a href="/list/<%= list.id %>" class="view-list" style="background: <%= list.color %>;">View List</a>
+
+            <!-- Tasks Preview (up to 2 tasks) -->
+            <% if (list.tasks && list.tasks.length > 0) { %>
+                <ul class="list-preview">
+                    <% list.tasks.slice(0,2).forEach(task => { %>
+                        <li><%= task.title %></li>
+                    <% }) %>
+                </ul>
+            <% } else { %>
+                <ul class="list-preview"></ul> <!-- empty space if no tasks -->
+            <% } %>
+
+            <!-- Delete Button at Bottom -->
+            <a href="/delete/<%= list.id %>" class="delete-list-btn" style="background: <%= list.color %>;">Delete</a>
+        </div>
+    <% } %>
+</div>
+
+<%- include('parts/footer.ejs'); -%>

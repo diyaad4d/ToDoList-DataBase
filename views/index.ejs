@@ -1,45 +1,62 @@
 <%- include('parts/header.ejs'); -%>
 
-<div class="box" id="heading">
-    <h1>
-        <%= listTitle %>
-    </h1>
-</div>
-<div class="box">
-    <% for(let item of listItems){%>
-        <div class="item">
-            <form action="/delete" method="post">
-                <input type="checkbox" onchange="this.form.submit()" name="deleteItemId" value="<%= item.id %>">
+<main style="--list-color: <%= listColor %>;">
+
+    <div class="back-home">
+        <a href="/" class="back-btn" style="background: <%= listColor %>;">My Lists</a>
+    </div>
+    <div class="box" id="heading">
+        <h1><%= listTitle %></h1>
+    </div>
+
+    <div class="box">
+        <% for(let item of listItems){ %>
+            <div class="item">
+                <!-- Delete checkbox -->
+                <form action="/list/<%= id %>/delete" method="post">
+                    <input type="checkbox" onchange="this.form.submit()" name="deleteItemId" value="<%= item.id %>">
+                </form>
+
+                <!-- Item title -->
+                <p id="title<%=item.id%>"><%= item.title %></p>
+
+                <!-- Edit form -->
+                <form class="edit" action="/list/<%= id %>/edit" method="post">
+                    <input type="hidden" name="updatedItemId" value="<%= item.id %>">
+                    <input id="input<%=item.id%>" type="text" name="updatedItemTitle" value="<%= item.title %>" autocomplete="off" hidden />
+
+                    <!-- Done button -->
+                    <button id="done<%=item.id%>" class="edit" type="submit" hidden>
+                        <svg class="icon" viewBox="0 0 24 24" width="18" height="18">
+                            <path d="M20 6L9 17l-5-5" stroke="var(--list-color)" stroke-width="2" fill="none"/>
+                        </svg>
+                    </button>
+
+                </form>
+
+                <!-- Edit button -->
+                <button id="edit<%=item.id%>" class="edit" onclick="handler('<%=item.id%>')">
+                    <svg class="icon" viewBox="0 0 24 24" width="24" height="24">
+                        <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" fill="var(--list-color)"/>
+                    </svg>
+                </button>
+            </div>
+        <% } %>
+            <form class="item" action="/list/<%= id %>/add" method="post">
+                <input type="text" name="newItem" placeholder="New Item" autocomplete="off" autofocus />
+                <button class="add" type="submit">+</button>
             </form>
+    </div>
 
-            <p id="title<%=item.id%>">
-                <%= item.title %>
-            </p>
-
-            <form class="edit" action="/edit" method="post">
-                <input type="hidden" name="updatedItemId" value="<%= item.id %>">
-                <input id="input<%=item.id%>" type="text" name="updatedItemTitle" value="<%= item.title %>" autocomplete="off"
-                       autofocus="true" hidden="true" />
-                <button id="done<%=item.id%>" class="edit" type="submit" hidden><img class="icon"
-                                                                                     src="/assests/icons/first.svg" alt="tick image"></button>
-            </form>
-            <button id="edit<%=item.id%>" class="edit" onclick="handler('<%=item.id%>')"><img class="icon"
-                                                                                              src="/assests/icons/second.svg" alt="pencil image"></button>
-        </div>
-    <% } %>
-
-    <form class="item" action="/add" method="post">
-        <input type="text" name="newItem" placeholder="New Item" autocomplete="off" autofocus="true" />
-        <button class="add" type="submit" name="list" value=<%=listTitle %> >+</button>
-    </form>
-</div>
+</main>
 
 <script>
     function handler(id) {
-        document.getElementById("title" + id).setAttribute("hidden", true)
-        document.getElementById("edit" + id).setAttribute("hidden", true)
-        document.getElementById("done" + id).removeAttribute("hidden")
-        document.getElementById("input" + id).removeAttribute("hidden")
+        document.getElementById("title" + id).hidden = true;
+        document.getElementById("edit" + id).hidden = true;
+        document.getElementById("done" + id).hidden = false;
+        document.getElementById("input" + id).hidden = false;
     }
 </script>
+
 <%- include('parts/footer.ejs'); -%>

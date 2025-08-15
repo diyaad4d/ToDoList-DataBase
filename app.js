@@ -23,21 +23,38 @@ db.connect();
 let items=[];
 let lists=[];
 
-async function getLists(){
-    
+// async function getAllLists(){
+//     const result=await db.query('SELECT * FROM multiple_lists ORDER BY id ASC');
+//     return result.rows;
+// }
+
+async function getAllLists() {
+    const listsResult = await db.query('SELECT * FROM multiple_lists ORDER BY id ASC');
+    const lists = listsResult.rows;
+
+    for (let list of lists) {
+        const tasksResult = await db.query('SELECT * FROM list WHERE list_id=$1 ORDER BY id ASC', [list.id]);
+        list.tasks = tasksResult.rows;
+    }
+
+    return lists;
 }
 
-async function getItems() {
-    const result=await db.query('select * from list order by id asc ');
+async function addList(name,color){
+    await db.query('INSERT INTO multiple_lists (name, color) VALUES ($1, $2)', [name, color]);
+}
+
+async function getItems(id) {
+    const result = await db.query('SELECT * FROM list WHERE list_id = $1 ORDER BY id ASC', [id]);
     console.log(result.rows);
     return result.rows;
 }
 
-async function addItem(item){
+async function addItem(item,id){
     try{
         const result = await db.query(
-            'INSERT INTO list (title) VALUES ($1) RETURNING *',
-            [item]
+            'INSERT INTO list (title,list_id) VALUES ($1,$2) RETURNING *',
+            [item,id]
         );
     }
     catch(err){
@@ -64,35 +81,73 @@ async function deleteItem(id){
 }
 
 
+/******************************************************************************/
 
- app.get("/", async (req, res) => {
-     items=await getItems();
-     res.render("index.ejs", {
-        listTitle: "Tasks",
-        listItems: items,
-    });
- });
-
-app.post("/add", async (req, res) => {
-    const item = req.body.newItem;
-    await addItem(item);
-    res.redirect("/");
+app.get("/", async (req, res) => {
+     lists=await getAllLists();
+     res.render("lists.ejs",
+     { lists }
+     );
 });
 
-app.post('/edit', async (req, res) => {
-    const id=req.body.updatedItemId;
-    const newItem=req.body.updatedItemTitle;
-    await editItem(newItem,id);
-    res.redirect("/");
+app.get('/new',(req,res)=>{
+    res.render('new.ejs');
 });
 
-app.post('/delete', async (req, res) => {
-   const id=req.body.deleteItemId;
-   await deleteItem(id);
+app.post('/new',async (req,res)=>{
+   const {name,color}=req.body;
+   await addList(name,color);
    res.redirect('/');
 });
 
+app.get('/list/:id', async (req, res) => {
+    const id = req.params.id;
+    const items = await getItems(id);
 
+    const listResult = await db.query('SELECT * FROM multiple_lists WHERE id = $1', [id]);
+    const list = listResult.rows[0];
+
+    res.render('index.ejs', {
+        listTitle: list.name,
+        listColor: list.color,
+        id,
+        listItems: items
+    });
+});
+
+app.post("/list/:id/add", async (req, res) => {
+    const item = req.body.newItem;
+    const id=req.params.id;
+    await addItem(item,id);
+    res.redirect(`/list/${id}`);
+});
+
+app.post('/list/:id/edit', async (req, res) => {
+    const id=req.body.updatedItemId;
+    const newItem=req.body.updatedItemTitle;
+    const listId=req.params.id;
+    await editItem(newItem,id);
+    res.redirect(`/list/${listId}`);
+});
+
+app.post('/list/:id/delete', async (req, res) => {
+   const id=req.body.deleteItemId;
+   const listId=req.params.id;
+   await deleteItem(id);
+   res.redirect(`/list/${listId}`);
+});
+
+app.get('/delete/:id', async (req, res) => {
+    const listId = req.params.id;
+    try {
+        await db.query('DELETE FROM multiple_lists WHERE id=$1', [listId]);
+        // Tasks will be deleted automatically because of ON DELETE CASCADE
+        res.redirect('/');
+    } catch (err) {
+        console.error('Error deleting list:', err);
+        res.redirect('/');
+    }
+});
 
 
 app.listen(port, () => {
