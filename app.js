@@ -23,11 +23,6 @@ db.connect();
 let items=[];
 let lists=[];
 
-// async function getAllLists(){
-//     const result=await db.query('SELECT * FROM multiple_lists ORDER BY id ASC');
-//     return result.rows;
-// }
-
 async function getAllLists() {
     const listsResult = await db.query('SELECT * FROM multiple_lists ORDER BY id ASC');
     const lists = listsResult.rows;
@@ -79,7 +74,6 @@ async function deleteItem(id){
         console.error('Error inserting item:', err);
     }
 }
-
 
 /******************************************************************************/
 
